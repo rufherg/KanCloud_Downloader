@@ -6,9 +6,9 @@
 @Date   : 2020/06/01 15:03
 
 Description:
-    用于一键下载看云上面的markdown文件，并根据目录结构自动生成
+    用于一键下载看云上面的markdown文件，并根据目录结构自动生成文件夹
 Usage:
-    $python kc_download.py -u http://xxxx.com
+    $python kc_download.py -u https://www.kancloud.cn/alex_wsc/android/401651
 '''
 
 import os
