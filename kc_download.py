@@ -17,6 +17,7 @@ import re
 import json
 import requests
 import argparse
+import platform
 from bs4 import BeautifulSoup
 
 class KanCloud():
@@ -25,7 +26,15 @@ class KanCloud():
         self.url = url
         self.base_url = parse_url(self.url)
         self.data = self.get_data(self.url)
+        self.flag = self.get_os()
         self.create()
+
+    @staticmethod
+    def get_os():
+        if platform.system() == 'Windows':
+            return '\\'
+        elif platform.system() == 'Darwin' or platform.system() == 'Linux':
+            return '/'
 
     def get_summary(self,data):
         return self.data['summary']
@@ -41,7 +50,7 @@ class KanCloud():
         print("[+]Start KanCloud Downloader")
         print("[+]Target Article: " + self.data['config']['title'])
         base_path = get_path()
-        mk_dir = base_path + '\\'+ self.data['config']['title']
+        mk_dir = base_path + self.flag + self.data['config']['title']
         make_path(mk_dir)
         print("[+]Downloading...")
         for table in self.data['summary']:
@@ -50,13 +59,13 @@ class KanCloud():
 
     def isArt(self,table,mk_dir):
         try:
-            file_name = mk_dir + '\\' + table['name']
+            file_name = mk_dir + self.flag + table['name']
             make_file(file_name,self.get_content(table['id']))
             if table['articles']:
-                art_path = mk_dir + '\\' + table['title']
+                art_path = mk_dir + self.flag + table['title']
                 make_path(art_path)
                 for art in table['articles']:
-                    file_path = art_path + '\\' + art['name']
+                    file_path = art_path + self.flag + art['name']
                     content = self.get_content(art['id'])
                     make_file(file_path,content)
                     self.isArt(art,art_path)
